@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dr. Dark Pro Terminal</title>
+    <title>Doctor Dark | Pro Terminal</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -12,133 +12,142 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0b0e11; --card: #181a20; --primary: #f0b90b; --text: #eff2f5; --sub: #848e9c; --border: #2b3139; --up: #0ecb81; --down: #f6465d; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        .app-header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 1000; }
-        .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; }
-        .logo span { color: var(--primary); }
+        /* Header */
+        .header { position: fixed; top: 0; width: 100%; height: 55px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 1000; }
+        .logo { font-weight: 800; font-size: 18px; color: var(--primary); }
 
-        .content { margin-top: 60px; padding: 15px; padding-bottom: 80px; }
+        .content { margin-top: 55px; padding: 15px; padding-bottom: 80px; }
 
-        /* Top Pumping Coin Banner */
-        .pump-banner { background: linear-gradient(90deg, #1e2329, #0b0e11); border: 1px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
-        
+        /* AI Prediction Box */
+        .ai-box { background: linear-gradient(135deg, #1e2329 0%, #0b0e11 100%); border: 1px solid var(--primary); border-radius: 12px; padding: 12px; margin-bottom: 15px; }
+        .badge { background: var(--primary); color: #000; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 5px; }
+
         /* CMC Style Tabs */
-        .tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px; overflow-x: auto; white-space: nowrap; }
-        .tab { padding: 10px 0; color: var(--sub); font-weight: 600; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tabs { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px; overflow-x: auto; }
+        .tab { padding: 10px 0; color: var(--sub); font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
         .tab.active { color: #fff; border-bottom: 2px solid var(--primary); }
 
         /* CMC Table Layout */
-        .market-table { width: 100%; border-collapse: collapse; }
-        .market-table th { text-align: left; color: var(--sub); font-size: 11px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        .market-table td { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: var(--sub); font-size: 11px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        td { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         .rank { font-size: 11px; color: var(--sub); width: 25px; }
-        .coin-info { display: flex; align-items: center; gap: 10px; }
-        .coin-icon { width: 24px; height: 24px; border-radius: 50%; }
-        .m-cap { font-size: 11px; color: var(--sub); margin-top: 2px; }
+        .coin-meta { display: flex; align-items: center; gap: 10px; }
+        .coin-icon { width: 25px; height: 25px; border-radius: 50%; }
+        .market-cap { font-size: 10px; color: var(--sub); }
         
-        .price-col { text-align: right; }
-        .percent-col { text-align: right; font-weight: 600; width: 70px; }
-        
-        .green { color: var(--up); }
-        .red { color: var(--down); }
+        .price { font-weight: 700; text-align: right; }
+        .change { font-weight: 700; text-align: right; width: 80px; }
+        .up { color: var(--up); } .down { color: var(--down); }
 
-        .app-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: #181a20; border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-item { text-align: center; font-size: 10px; color: var(--sub); font-weight: 600; }
-        .nav-item.active { color: var(--primary); }
+        /* Nav Bar */
+        .nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #181a20; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
+        .nav-link { text-align: center; font-size: 10px; color: var(--sub); font-weight: 600; }
+        .nav-link.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="app-header">
-    <div class="logo">DOCTOR <span>DARK AI</span></div>
-    <div style="font-size: 11px;"><span class="green">●</span> LIVE</div>
+<div class="header">
+    <div class="logo">DR. DARK AI</div>
+    <div id="gas-price" style="font-size: 10px; color: var(--up);">● LIVE TERMINAL</div>
 </div>
 
 <div class="content">
-    <div class="pump-banner" id="top-pump">
-        <div>
-            <div style="font-size: 10px; color: var(--primary); font-weight: bold;">🔥 TOP PUMPING NOW</div>
-            <div id="pump-name" style="font-weight: bold; font-size: 16px;">Loading...</div>
+    <div class="ai-box" id="top-alert">
+        <span class="badge">TOP GAINER NOW</span>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div id="pump-coin" style="font-weight:800; font-size:18px;">SCANNING...</div>
+            <div id="pump-pct" class="up" style="font-weight:800; font-size:20px;">0.00%</div>
         </div>
-        <div id="pump-change" class="green" style="font-size: 18px; font-weight: 800;">+0.00%</div>
     </div>
 
     <div class="tabs">
-        <div class="tab active">Top 100</div>
-        <div class="tab">Trending</div>
-        <div class="tab">Watchlist</div>
+        <div class="tab active" onclick="changeTab('all', this)">Top 100</div>
+        <div class="tab" onclick="changeTab('trending', this)">Trending</div>
+        <div class="tab" onclick="changeTab('new', this)">New Listing</div>
     </div>
 
-    <table class="market-table">
+    <table>
         <thead>
             <tr>
-                <th style="width: 30px;">#</th>
-                <th>Name</th>
-                <th class="price-col">Price</th>
-                <th class="percent-col">24h%</th>
+                <th>#</th>
+                <th>Asset</th>
+                <th style="text-align:right;">Price</th>
+                <th style="text-align:right;">24h%</th>
             </tr>
         </thead>
-        <tbody id="coin-list">
+        <tbody id="market-body">
             </tbody>
     </table>
 </div>
 
-<div class="app-nav">
-    <div class="nav-item active">Markets</div>
-    <div class="nav-item">Analytics</div>
-    <div class="nav-item">Dr. AI</div>
-    <div class="nav-item">Portfolio</div>
+<div class="nav">
+    <div class="nav-link active">Home</div>
+    <div class="nav-link">Signals</div>
+    <div class="nav-link">Trade</div>
+    <div class="nav-link">Wallet</div>
 </div>
 
 <script>
-    async function loadMarkets() {
+    let currentTab = 'all';
+    let allData = [];
+
+    async function loadData() {
         try {
+            // Real-time data from API
             const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&sparkline=false');
-            const data = await response.json();
+            allData = await response.json();
             
-            // Update Top Pump
-            const topGainer = [...data].sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)[0];
-            document.getElementById('pump-name').innerText = topGainer.name.toUpperCase();
-            document.getElementById('pump-change').innerText = "+" + topGainer.price_change_percentage_24h.toFixed(2) + "%";
+            updateDisplay();
+        } catch (e) { console.error("Update failed"); }
+    }
 
-            // Render Table
-            const list = document.getElementById('coin-list');
-            list.innerHTML = data.map((coin, index) => `
-                <tr>
-                    <td class="rank">${index + 1}</td>
-                    <td>
-                        <div class="coin-info">
-                            <img src="${coin.image}" class="coin-icon">
-                            <div>
-                                <div style="font-weight: bold; font-size: 14px;">${coin.symbol.toUpperCase()}</div>
-                                <div class="m-cap">$${formatCap(coin.market_cap)}</div>
-                            </div>
+    function updateDisplay() {
+        // Update Top Pump Banner
+        const top = [...allData].sort((a,b) => b.price_change_percentage_24h - a.price_change_percentage_24h)[0];
+        document.getElementById('pump-coin').innerText = top.name.toUpperCase();
+        document.getElementById('pump-pct').innerText = "+" + top.price_change_percentage_24h.toFixed(2) + "%";
+
+        // Filter data based on tab
+        let filtered = allData;
+        if(currentTab === 'trending') filtered = [...allData].sort(() => Math.random() - 0.5).slice(0, 10);
+        if(currentTab === 'new') filtered = [...allData].reverse().slice(0, 10);
+
+        const body = document.getElementById('market-body');
+        body.innerHTML = filtered.map((c, i) => `
+            <tr>
+                <td class="rank">${i + 1}</td>
+                <td>
+                    <div class="coin-meta">
+                        <img src="${c.image}" class="coin-icon">
+                        <div>
+                            <div style="font-weight:700;">${c.symbol.toUpperCase()}</div>
+                            <div class="market-cap">$${(c.market_cap / 1e9).toFixed(2)}B CAP</div>
                         </div>
-                    </td>
-                    <td class="price-col">
-                        <div style="font-weight: bold; font-size: 14px;">$${coin.current_price.toLocaleString()}</div>
-                    </td>
-                    <td class="percent-col ${coin.price_change_percentage_24h >= 0 ? 'green' : 'red'}">
-                        ${coin.price_change_percentage_24h >= 0 ? '▲' : '▼'} ${Math.abs(coin.price_change_percentage_24h).toFixed(2)}%
-                    </td>
-                </tr>
-            `).join('');
-        } catch (e) { console.error("Error loading data"); }
+                    </div>
+                </td>
+                <td class="price">$${c.current_price.toLocaleString()}</td>
+                <td class="change ${c.price_change_percentage_24h >= 0 ? 'up' : 'down'}">
+                    ${c.price_change_percentage_24h >= 0 ? '▲' : '▼'} ${Math.abs(c.price_change_percentage_24h).toFixed(2)}%
+                </td>
+            </tr>
+        `).join('');
     }
 
-    function formatCap(num) {
-        if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
-        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-        return num.toLocaleString();
+    function changeTab(tab, el) {
+        currentTab = tab;
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        updateDisplay();
     }
 
-    loadMarkets();
-    setInterval(loadMarkets, 30000); // Refresh every 30 sec
+    loadData();
+    setInterval(loadData, 30000); // Auto-refresh 30s
 </script>
-
 </body>
 </html>
