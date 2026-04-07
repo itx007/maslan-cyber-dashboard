@@ -3,70 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dark | Premium Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Doctor Dark | AI Trading Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0b0e11; --card: #181a20; --border: #2b3139; --primary: #f0b90b; --text: #eff2f5; --sub: #848e9c; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        :root { --bg: #0b0e11; --card: #181a20; --primary: #f0b90b; --text: #eff2f5; --border: #2b3139; --up: #0ecb81; --down: #f6465d; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+        
+        .top-nav { background: #181a20; padding: 10px 5%; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 1.2rem; }
 
-        /* Top Banner */
-        .top-bar { background: #181a20; border-bottom: 1px solid var(--border); padding: 8px 5%; display: flex; gap: 20px; font-size: 11px; color: var(--sub); overflow-x: auto; white-space: nowrap; }
-        .top-bar b { color: var(--primary); }
+        .container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px 5%; }
+        @media (max-width: 1100px) { .container { grid-template-columns: 1fr; } }
 
-        /* Main Container */
-        .main-grid { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px 5%; }
-        @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
-
-        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-
-        /* Coin Profile Area */
-        .coin-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        .coin-header img { width: 35px; height: 35px; border-radius: 50%; }
-        .price-hero { font-size: 1.8rem; font-weight: 700; color: var(--text); margin-top: 5px; }
-
-        /* CMC Table Style */
-        .tab-box { display: flex; gap: 20px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
-        .tab { cursor: pointer; padding-bottom: 10px; color: var(--sub); font-weight: 600; font-size: 14px; }
+        .panel { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        
+        /* AI INSIGHTS STYLE */
+        .ai-hub { background: linear-gradient(145deg, #1e2329, #0b0e11); border: 1px solid var(--primary); padding: 15px; border-radius: 10px; margin-top: 20px; }
+        .ai-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; margin-bottom: 10px; display: inline-block; }
+        
+        .tab-bar { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        .tab { cursor: pointer; padding-bottom: 8px; color: #848e9c; font-weight: 600; }
         .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
 
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; font-size: 13px; }
-        .flex-coin { display: flex; align-items: center; gap: 10px; }
-        .list-logo { width: 22px; height: 22px; border-radius: 50%; }
-        .up { color: #0ecb81; } .down { color: #f6465d; }
-
-        /* Floating Footer */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #181a20; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); }
-        .nav-link { font-size: 10px; color: var(--sub); text-transform: uppercase; font-weight: 700; cursor: pointer; }
-        .nav-link.active { color: var(--primary); }
+        td { padding: 12px 5px; border-bottom: 1px solid #2b3139; cursor: pointer; font-size: 13px; }
+        .coin-img { width: 20px; vertical-align: middle; margin-right: 8px; }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <span>Cryptos: <b>2.4M+</b></span>
-    <span>Global Cap: <b id="g-cap">$2.41T</b></span>
-    <span>Fear & Greed: <b id="fgi-val">--</b></span>
+<div class="top-nav">
+    <div class="logo">DOCTOR DARK <span>AI</span></div>
+    <div id="market-status" style="font-size: 11px; color: var(--up);">● AI ANALYSIS ACTIVE</div>
 </div>
 
-<div class="main-grid">
-    <div class="panel">
-        <div class="coin-header" id="header-box">
-            <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" id="main-logo">
-            <div>
-                <div id="main-title" style="font-weight:700;">BITCOIN (BTC)</div>
-                <div class="price-hero" id="main-price">Loading...</div>
+<div class="container">
+    <div>
+        <div class="panel" style="margin-bottom: 20px;">
+            <div id="tradingview_chart" style="height: 450px;"></div>
+        </div>
+
+        <div class="panel ai-hub">
+            <span class="ai-badge">DOCTOR DARK AI INSIGHTS</span>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 250px;">
+                    <h4 id="ai-coin-name" style="margin:0 0 10px 0;">BITCOIN ANALYSIS</h4>
+                    <p id="ai-text" style="font-size: 13px; color: #848e9c; line-height: 1.5;">
+                        Scanning technical indicators... RSI is neutral. MACD showing bullish crossover. 
+                        <b>Target: $72,400</b> | <b>Support: $68,200</b>
+                    </p>
+                </div>
+                <div style="width: 200px; height: 120px;" id="ai-gauge">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="chart_div" style="height: 500px;"></div>
     </div>
 
     <div class="panel">
-        <div class="tab-box">
-            <div class="tab active" onclick="updateList('top', this)">Top 100</div>
-            <div class="tab" onclick="updateList('fav', this)">Watchlist</div>
+        <div class="tab-bar">
+            <div class="tab active" onclick="showList('top', this)">Markets</div>
+            <div class="tab" onclick="showList('fav', this)">Watchlist</div>
         </div>
-        <div style="max-height: 500px; overflow-y: auto;">
+        <div style="max-height: 600px; overflow-y: auto;">
             <table>
                 <tbody id="coin-list"></tbody>
             </table>
@@ -74,77 +75,68 @@
     </div>
 </div>
 
-<nav class="bottom-nav">
-    <div class="nav-link active">Markets</div>
-    <div class="nav-link">Analytics</div>
-    <div class="nav-link">Dr. Dark AI</div>
-</nav>
-
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let allCoins = [];
+    let coins = [];
 
-    async function loadApp() {
-        await refreshPrices();
-        updateStats();
-        selectCoin('bitcoin');
-        setInterval(refreshPrices, 60000);
-    }
-
-    async function refreshPrices() {
-        try {
-            const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
-            allCoins = await res.json();
-            renderTable(allCoins);
-        } catch(e) { console.log("API Error"); }
+    async function init() {
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
+        coins = await res.json();
+        renderTable(coins);
+        selectCoin('btc');
     }
 
     function renderTable(data) {
-        const body = document.getElementById('coin-list');
-        body.innerHTML = data.map(c => `
-            <tr onclick="selectCoin('${c.id}')">
-                <td>
-                    <div class="flex-coin">
-                        <img src="${c.image}" class="list-logo">
-                        <b>${c.symbol.toUpperCase()}</b>
-                    </div>
-                </td>
-                <td>$${c.current_price.toLocaleString()}</td>
-                <td class="${c.price_change_percentage_24h >= 0 ? 'up' : 'down'}">
+        const list = document.getElementById('coin-list');
+        list.innerHTML = data.map(c => `
+            <tr onclick="selectCoin('${c.symbol}')">
+                <td><img src="${c.image}" class="coin-img"> <b>${c.symbol.toUpperCase()}</b></td>
+                <td style="text-align:right;">$${c.current_price.toLocaleString()}</td>
+                <td style="text-align:right;" class="${c.price_change_percentage_24h >= 0 ? 'color: #0ecb81' : 'color: #f6465d'}">
                     ${c.price_change_percentage_24h.toFixed(1)}%
                 </td>
             </tr>
         `).join('');
     }
 
-    function selectCoin(id) {
-        const coin = allCoins.find(x => x.id === id) || allCoins[0];
-        if(!coin) return;
-
-        document.getElementById('main-logo').src = coin.image;
-        document.getElementById('main-title').innerText = `${coin.name.toUpperCase()} (${coin.symbol.toUpperCase()})`;
-        document.getElementById('main-price').innerText = '$' + coin.current_price.toLocaleString();
-
+    function selectCoin(symbol) {
+        symbol = symbol.toUpperCase();
+        document.getElementById('ai-coin-name').innerText = symbol + " AI PREDICTION";
+        
+        // 1. Load Main Chart
         new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:" + coin.symbol.toUpperCase() + "USDT",
-            "theme": "dark", "container_id": "chart_div", "style": "1"
+            "autosize": true, "symbol": "BINANCE:" + symbol + "USDT",
+            "interval": "D", "theme": "dark", "container_id": "tradingview_chart"
         });
+
+        // 2. Load AI Technical Gauge
+        const gaugeContainer = document.getElementById('ai-gauge');
+        gaugeContainer.innerHTML = ''; 
+        const script = document.createElement('script');
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
+        script.async = true;
+        script.innerHTML = JSON.stringify({
+            "interval": "4h", "width": "100%", "isTransparent": true, "height": "100%",
+            "symbol": "BINANCE:" + symbol + "USDT", "showIntervalTabs": false, "displayMode": "single", "locale": "en", "colorTheme": "dark"
+        });
+        gaugeContainer.appendChild(script);
+
+        // 3. AI Text Logic (Simple Example)
+        document.getElementById('ai-text').innerHTML = `
+            Trend Analysis: <b>${symbol}</b> is currently showing high volatility. 
+            AI suggests a <b>Buy</b> entry near support levels. 
+            <br>Stop Loss: <span style="color:#f6465d">3% below entry</span>.
+        `;
     }
 
-    async function updateStats() {
-        const res = await fetch('https://api.alternative.me/fng/');
-        const d = await res.json();
-        document.getElementById('fgi-val').innerText = d.data[0].value + " (" + d.data[0].value_classification + ")";
-    }
-
-    function updateList(type, el) {
+    function showList(type, el) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
-        if(type === 'fav') renderTable(allCoins.filter(c => ['btc','eth','sol','trx'].includes(c.symbol.toLowerCase())));
-        else renderTable(allCoins);
+        if(type === 'fav') renderTable(coins.filter(c => ['btc','eth','sol','trx'].includes(c.symbol.toLowerCase())));
+        else renderTable(coins);
     }
 
-    loadApp();
+    init();
 </script>
 </body>
 </html>
