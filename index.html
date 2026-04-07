@@ -3,93 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Dark Analytics</title>
+    <title>Doctor Dark | Pro Market Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #0b0e11; color: white; font-family: sans-serif; margin: 0; padding: 10px; }
-        .stats { display: flex; justify-content: space-around; background: #181a20; padding: 10px; font-size: 12px; border-radius: 5px; margin-bottom: 10px; }
-        .card { background: #1e2329; border-radius: 10px; padding: 15px; margin-bottom: 10px; border: 1px solid #474d57; }
-        .tab-bar { display: flex; gap: 15px; border-bottom: 1px solid #474d57; margin-bottom: 10px; }
-        .tab { cursor: pointer; padding-bottom: 5px; color: #848e9c; }
-        .active { color: #f0b90b; border-bottom: 2px solid #f0b90b; }
+        :root { --bg: #0b0e11; --card: #181a20; --border: #2b3139; --text-main: #eff2f5; --text-sub: #848e9c; --primary: #f0b90b; --up: #0ecb81; --down: #f6465d; }
+        body { margin: 0; background-color: var(--bg); color: var(--text-main); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        /* CMC Global Bar */
+        .global-stats { background: #181a20; border-bottom: 1px solid var(--border); padding: 8px 5%; display: flex; gap: 20px; font-size: 11px; color: var(--text-sub); overflow-x: auto; white-space: nowrap; }
+        .global-stats span b { color: var(--primary); }
+
+        /* Navigation Style */
+        .header { padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--text-main); letter-spacing: 1px; }
+        .logo span { color: var(--primary); }
+
+        .main-container { padding: 20px 5%; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+
+        /* Chart Section */
+        .chart-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .chart-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .chart-title { font-weight: 600; font-size: 1.1rem; }
+
+        /* Market Table Section */
+        .market-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .tab-wrapper { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
+        .tab { padding: 10px 0; cursor: pointer; color: var(--text-sub); font-weight: 600; font-size: 14px; position: relative; transition: 0.3s; }
+        .tab.active { color: var(--primary); }
+        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--primary); }
+
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 5px; border-bottom: 1px solid #2b3139; font-size: 14px; }
-        .up { color: #0ecb81; } .down { color: #f6465d; }
+        th { text-align: left; font-size: 12px; color: var(--text-sub); padding: 10px 5px; border-bottom: 1px solid var(--border); }
+        td { padding: 14px 5px; border-bottom: 1px solid var(--border); font-size: 13.5px; font-weight: 500; cursor: pointer; }
+        td:first-child { color: var(--text-sub); width: 30px; }
+        .symbol-box { display: flex; align-items: center; gap: 8px; }
+        .up-val { color: var(--up); }
+        .down-val { color: var(--down); }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #474d57; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="stats">
-    <div>Cap: <span style="color:#f0b90b">$2.4T</span></div>
-    <div>F&G Index: <span id="fgi" style="color:#f0b90b">Loading..</span></div>
+<div class="global-stats">
+    <span>Cryptos: <b>2.4M+</b></span>
+    <span>Exchanges: <b>740</b></span>
+    <span>Market Cap: <b id="total-cap">$2.43T</b></span>
+    <span>24h Vol: <b id="total-vol">$84.2B</b></span>
+    <span>Dominance: <b>BTC 52.1% ETH 16.8%</b></span>
+    <span>Fear & Greed Index: <b id="fgi-val">--</b></span>
 </div>
 
-<div class="card">
-    <h3 id="c-name">BTCUSDT Chart</h3>
-    <div id="chart-box" style="height:400px;"></div>
-</div>
+<header class="header">
+    <div class="logo">DOCTOR <span>DARK</span></div>
+    <div style="font-size: 12px; color: var(--up);">● System Secure</div>
+</header>
 
-<div class="card">
-    <div class="tab-bar">
-        <div class="tab active" onclick="loadData('top', this)">Top 100</div>
-        <div class="tab" onclick="loadData('trending', this)">Trending</div>
-        <div class="tab" onclick="loadData('fav', this)">Watchlist</div>
+<div class="main-container">
+    <div class="chart-card">
+        <div class="chart-header">
+            <div class="chart-title" id="active-pair">BTCUSDT Analysis</div>
+            <div style="color: var(--text-sub); font-size: 12px;">Live Execution</div>
+        </div>
+        <div id="tradingview_widget" style="height: 500px;"></div>
     </div>
-    <div style="max-height: 400px; overflow-y: auto;">
-        <table>
-            <tbody id="list"></tbody>
-        </table>
+
+    <div class="market-card">
+        <div class="tab-wrapper">
+            <div class="tab active" onclick="changeList('top', this)">Top 100</div>
+            <div class="tab" onclick="changeList('trending', this)">Trending</div>
+            <div class="tab" onclick="changeList('fav', this)">Watchlist</div>
+        </div>
+        <div style="max-height: 550px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Name</th><th>Price</th><th>24h %</th></tr>
+                </thead>
+                <tbody id="coin-table-body"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let raw = [];
+    let marketData = [];
+    const watchlist = ['btc', 'eth', 'bnb', 'sol', 'trx', 'doge'];
 
-    async function start() {
+    async function init() {
+        await loadMarketData();
+        updateFearGreed();
         showChart('BTCUSDT');
-        loadData('top');
-        const f = await fetch('https://api.alternative.me/fng/');
-        const fd = await f.json();
-        document.getElementById('fgi').innerText = fd.data[0].value;
     }
 
-    async function loadData(type, el) {
-        if(el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-        
-        const list = document.getElementById('list');
-        list.innerHTML = 'Loading...';
-
+    async function loadMarketData() {
         try {
-            let url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100';
-            if(type === 'trending') url = 'https://api.coingecko.com/api/v3/search/trending';
-            
-            const res = await fetch(url);
-            const data = await res.json();
-            
-            let final = type === 'trending' ? data.coins.map(c => ({symbol: c.item.symbol, current_price: 'Hot', price_change_percentage_24h: 0})) : data;
-            if(type === 'fav') final = data.filter(c => ['btc','eth','sol','bnb','trx'].includes(c.symbol.toLowerCase()));
-
-            list.innerHTML = final.map(c => `
-                <tr onclick="showChart('${c.symbol.toUpperCase()}USDT')">
-                    <td><strong>${c.symbol.toUpperCase()}</strong></td>
-                    <td>${typeof c.current_price === 'number' ? '$'+c.current_price.toLocaleString() : c.current_price}</td>
-                    <td class="${c.price_change_percentage_24h >= 0 ? 'up' : 'down'}">${c.price_change_percentage_24h.toFixed(2)}%</td>
-                </tr>
-            `).join('');
-        } catch(e) { list.innerHTML = 'Error Loading Data'; }
+            const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&sparkline=false');
+            marketData = await res.json();
+            renderTable(marketData);
+        } catch (e) { console.error("Data fetch error"); }
     }
 
-    function showChart(s) {
-        document.getElementById('c-name').innerText = s + " Analysis";
+    async function fetchTrending() {
+        const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
+        const data = await res.json();
+        const formatted = data.coins.map(c => ({
+            symbol: c.item.symbol.toUpperCase(),
+            current_price: 'HOT',
+            price_change_percentage_24h: 0,
+            name: c.item.name
+        }));
+        renderTable(formatted, true);
+    }
+
+    function renderTable(data, isTrend = false) {
+        const body = document.getElementById('coin-table-body');
+        body.innerHTML = data.map((coin, i) => `
+            <tr onclick="showChart('${coin.symbol.toUpperCase()}USDT')">
+                <td>${i+1}</td>
+                <td>
+                    <div class="symbol-box">
+                        <strong>${coin.symbol.toUpperCase()}</strong>
+                    </div>
+                </td>
+                <td>${typeof coin.current_price === 'number' ? '$' + coin.current_price.toLocaleString() : coin.current_price}</td>
+                <td class="${coin.price_change_percentage_24h >= 0 ? 'up-val' : 'down-val'}">
+                    ${coin.price_change_percentage_24h.toFixed(2)}%
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function changeList(type, el) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        if(type === 'trending') fetchTrending();
+        else if(type === 'fav') renderTable(marketData.filter(c => watchlist.includes(c.symbol.toLowerCase())));
+        else loadMarketData();
+    }
+
+    function showChart(pair) {
+        document.getElementById('active-pair').innerText = pair + " Pro Analysis";
         new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:"+s, "theme": "dark", "container_id": "chart-box"
+            "autosize": true, "symbol": "BINANCE:" + pair, "interval": "D", "timezone": "Etc/UTC",
+            "theme": "dark", "style": "1", "locale": "en", "container_id": "tradingview_widget",
+            "withdateranges": true, "hide_side_toolbar": false, "allow_symbol_change": true,
+            "details": true, "hotlist": true, "calendar": true
         });
     }
 
-    start();
+    async function updateFearGreed() {
+        const res = await fetch('https://api.alternative.me/fng/');
+        const d = await res.json();
+        document.getElementById('fgi-val').innerText = d.data[0].value + " (" + d.data[0].value_classification + ")";
+    }
+
+    init();
+    setInterval(loadMarketData, 60000); // Auto refresh every minute
 </script>
 </body>
 </html>
