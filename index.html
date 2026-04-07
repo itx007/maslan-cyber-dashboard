@@ -1,169 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Dark | Institutional Crypto Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #00f0ff;
-            --secondary: #ff0033;
-            --bg-black: #020204;
-            --card-bg: rgba(15, 15, 25, 0.7);
-            --border: rgba(0, 240, 255, 0.2);
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg-black);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* Login Overlay */
-        #login-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-black);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .login-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid var(--primary);
-            text-align: center;
-            backdrop-filter: blur(10px);
-            width: 300px;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: white;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        /* Top Navigation Bar */
-        .navbar {
-            background: rgba(0,0,0,0.8);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            color: var(--primary);
-            font-weight: bold;
-            text-shadow: 0 0 10px var(--primary);
-        }
-
-        /* Grid Layout */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            padding: 20px 5%;
-        }
-
-        @media (max-width: 900px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            overflow: hidden;
-        }
-
-        .chart-container {
-            height: 450px;
-        }
-
-        /* Real-time Ticker */
-        .ticker {
-            background: #0a0a0f;
-            padding: 10px;
-            display: flex;
-            gap: 30px;
-            font-family: monospace;
-            border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .price-tag { color: var(--primary); }
-        .change-up { color: #00ff88; }
-
-        .btn {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            background: var(--primary);
-            color: black;
-            box-shadow: 0 0 15px var(--primary);
-        }
-    </style>
-</head>
-<body>
-
-<div id="login-screen">
-    <div class="login-card">
-        <h2 style="font-family: 'Orbitron'; color: var(--primary);">SYSTEM AUTH</h2>
-        <input type="text" id="user" placeholder="Access ID">
-        <input type="password" id="pass" placeholder="Security Token">
-        <button class="btn" onclick="unlock()">ENTER SYSTEM</button>
-        <p id="err" style="color:var(--secondary); font-size: 0.8rem; margin-top:10px;"></p>
-    </div>
-</div>
-
-<div class="ticker">
-    <span>BTC/USDT <span class="price-tag" id="btc-p">...</span></span>
-    <span>ETH/USDT <span class="price-tag" id="eth-p">...</span></span>
-    <span>BNB/USDT <span class="price-tag" id="bnb-p">...</span></span>
-    <span>Sentiment: <span id="fgi" class="change-up">Loading...</span></span>
-</div>
-
-<div class="navbar">
-    <div class="logo">DR. DARK ANALYTICS</div>
-    <div style="font-size: 0.8rem; opacity:0.6;">NETWORK STATUS: SECURE</div>
-</div>
-
 <div class="main-grid">
     <div class="card chart-container">
-        <h3 style="margin-top:0; font-size: 0.9rem; color: var(--primary);">LIVE MARKET DATA (BTC)</h3>
-        <div id="tradingview_chart" style="height: 100%;"></div>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:BTCUSDT')">BTC</button>
+            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:ETHUSDT')">ETH</button>
+            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:BNBUSDT')">BNB</button>
+        </div>
+        
+        <h3 id="chart-title" style="margin-top:0; font-size: 0.9rem; color: var(--primary);">LIVE MARKET DATA (BTC)</h3>
+        <div id="tradingview_chart" style="height: 90%;"></div>
     </div>
 
     <div class="card">
@@ -171,32 +15,19 @@
         <button class="btn">Technical Scanner v4.2</button>
         <button class="btn">Whale Wallet Tracker</button>
         <button class="btn">AI Signal Generator</button>
-        
-        <div style="margin-top:30px; border-top: 1px solid var(--border); padding-top:20px;">
-            <p style="font-size: 0.8rem; color: var(--secondary);">LATEST ALERT:</p>
-            <p style="font-size: 0.75rem; line-height:1.4; opacity:0.8;">
-                Major BTC inflow detected in Coinbase exchange wallet. Possible volatility expected in 24h.
-            </p>
-        </div>
     </div>
 </div>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    function unlock() {
-        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
-            document.getElementById('login-screen').style.display = 'none';
-            initDashboard();
-        } else {
-            document.getElementById('err').innerText = "INVALID CREDENTIALS";
-        }
-    }
+    let currentWidget;
 
-    function initDashboard() {
-        // TradingView Widget
+    function changeChart(symbol) {
+        document.getElementById('chart-title').innerText = `LIVE MARKET DATA (${symbol.split(':')[1]})`;
+        
         new TradingView.widget({
             "autosize": true,
-            "symbol": "BINANCE:BTCUSDT",
+            "symbol": symbol,
             "interval": "60",
             "timezone": "Etc/UTC",
             "theme": "dark",
@@ -207,27 +38,27 @@
             "hide_top_toolbar": false,
             "container_id": "tradingview_chart"
         });
+    }
 
-        updateData();
-        setInterval(updateData, 10000);
+    // Initial load with BTC
+    function unlock() {
+        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
+            document.getElementById('login-screen').style.display = 'none';
+            changeChart('BINANCE:BTCUSDT');
+            updateData();
+            setInterval(updateData, 10000);
+        } else {
+            document.getElementById('err').innerText = "INVALID CREDENTIALS";
+        }
     }
 
     async function updateData() {
         try {
-            // Prices
             const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd');
             const data = await res.json();
             document.getElementById('btc-p').innerText = `$${data.bitcoin.usd.toLocaleString()}`;
             document.getElementById('eth-p').innerText = `$${data.ethereum.usd.toLocaleString()}`;
             document.getElementById('bnb-p').innerText = `$${data.binancecoin.usd.toLocaleString()}`;
-
-            // Fear and Greed
-            const fgiRes = await fetch('https://api.alternative.me/fng/');
-            const fgiData = await fgiRes.json();
-            document.getElementById('fgi').innerText = `${fgiData.data[0].value_classification} (${fgiData.data[0].value})`;
         } catch(e) {}
     }
 </script>
-
-</body>
-</html>
