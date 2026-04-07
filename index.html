@@ -3,316 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dark | Institutional Crypto Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Doctor Dark | Premium Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-deep: #0b0e11;
-            --bg-panel: #1e2329;
-            --primary: #f0b90b;
-            --text-main: #eff2f5;
-            --text-sub: #848e9c;
-            --border: rgba(71, 77, 87, 0.4);
-            --up: #0ecb81;
-            --down: #f6465d;
-        }
+        :root { --bg: #0b0e11; --card: #181a20; --border: #2b3139; --primary: #f0b90b; --text: #eff2f5; --sub: #848e9c; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* 1. Global Stats Bar (CMC Style) */
-        .global-banner {
-            background-color: #181a20;
-            border-bottom: 1px solid var(--border);
-            padding: 8px 5%;
-            font-size: 11px;
-            color: var(--text-sub);
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        .global-banner b { color: var(--text-main); }
-        .global-banner .primary-stat { color: var(--primary); }
-
-        /* 2. Professional Header */
-        .app-header {
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-            background: var(--bg-panel);
-        }
-        .app-logo { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; color: #fff; text-shadow: 0 0 10px rgba(240, 185, 11, 0.3); }
-        .app-logo span { color: var(--primary); }
-
-        /* 3. Fear & Greed Index Gauge */
-        .fgi-gauge-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #111;
-            padding: 5px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-        .fgi-dots { display: flex; gap: 4px; }
-        .fgi-dot { width: 8px; height: 8px; border-radius: 50%; opacity: 0.2; }
-        .fgi-dot.active { opacity: 1; }
+        /* Top Banner */
+        .top-bar { background: #181a20; border-bottom: 1px solid var(--border); padding: 8px 5%; display: flex; gap: 20px; font-size: 11px; color: var(--sub); overflow-x: auto; white-space: nowrap; }
+        .top-bar b { color: var(--primary); }
 
         /* Main Container */
-        .main-view {
-            padding: 20px 5% 70px; /* Padding for bottom nav */
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2.5fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 1000px) { .main-view { grid-template-columns: 1fr; } }
+        .main-grid { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px 5%; }
+        @media (max-width: 1000px) { .main-grid { grid-template-columns: 1fr; } }
 
-        /* Market Card & Coin Table */
-        .market-card {
-            background: var(--bg-panel);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        
-        /* 4. Navigation Tabs (CMC Style) */
-        .tab-bar {
-            display: flex;
-            gap: 20px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 20px;
-        }
-        .tab {
-            padding: 12px 0;
-            color: var(--text-sub);
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            position: relative;
-            transition: 0.3s;
-        }
-        .tab:hover { color: #fff; }
-        .tab.active { color: var(--primary); }
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: var(--primary);
-        }
+        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
 
-        /* 5. Professional Table */
-        .coin-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-        }
-        .coin-table th { text-align: left; color: var(--text-sub); font-size: 11px; font-weight: 600; padding: 10px 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .coin-table td { padding: 15px 5px; border-bottom: 1px solid rgba(71, 77, 87, 0.2); cursor: pointer; font-weight: 600; }
-        .coin-table tr:hover td { background: rgba(255,255,255,0.02); }
+        /* Coin Profile Area */
+        .coin-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .coin-header img { width: 35px; height: 35px; border-radius: 50%; }
+        .price-hero { font-size: 1.8rem; font-weight: 700; color: var(--text); margin-top: 5px; }
 
-        /* Coin Identity */
-        .coin-cell { display: flex; align-items: center; gap: 10px; }
-        .coin-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
-        .coin-symbol { color: var(--text-main); font-weight: 700; }
-        .coin-name { color: var(--text-sub); font-size: 12px; font-weight: 400; }
+        /* CMC Table Style */
+        .tab-box { display: flex; gap: 20px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .tab { cursor: pointer; padding-bottom: 10px; color: var(--sub); font-weight: 600; font-size: 14px; }
+        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
 
-        .price-up { color: var(--up); }
-        .price-down { color: var(--down); }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.03); cursor: pointer; font-size: 13px; }
+        .flex-coin { display: flex; align-items: center; gap: 10px; }
+        .list-logo { width: 22px; height: 22px; border-radius: 50%; }
+        .up { color: #0ecb81; } .down { color: #f6465d; }
 
-        /* 6. Chart & Tools */
-        .chart-section { height: 500px; position: relative; overflow: hidden; border-radius: 12px; }
-
-        /* 7. Bottom Navigation Bar */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #181a20;
-            border-top: 1px solid var(--border);
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-around;
-            z-index: 999;
-        }
-        .nav-item { text-align: center; color: var(--text-sub); text-transform: uppercase; font-size: 10px; font-weight: 600; cursor: pointer; }
-        .nav-item:hover { color: #fff; }
-        .nav-item.active { color: var(--primary); }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-thumb { background: #474d57; border-radius: 10px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-
+        /* Floating Footer */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #181a20; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid var(--border); }
+        .nav-link { font-size: 10px; color: var(--sub); text-transform: uppercase; font-weight: 700; cursor: pointer; }
+        .nav-link.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="global-banner">
+<div class="top-bar">
     <span>Cryptos: <b>2.4M+</b></span>
-    <span>Exchanges: <b>740</b></span>
-    <span>Global Cap: <b id="global-cap" class="primary-stat">$2.34T</b></span>
-    <span>24h Vol: <b id="global-vol">$84.2B</b></span>
-    <span>Dominance: <b>BTC 52.4% | ETH 16.8%</b></span>
+    <span>Global Cap: <b id="g-cap">$2.41T</b></span>
+    <span>Fear & Greed: <b id="fgi-val">--</b></span>
 </div>
 
-<header class="app-header">
-    <div class="app-logo">DOCTOR <span>DARK</span></div>
-    
-    <div class="fgi-gauge-container">
-        <span style="font-size: 12px; color: #888;">SENTIMENT</span>
-        <div class="fgi-dots">
-            <div class="fgi-dot active" style="background:#f6465d;"></div>
-            <div class="fgi-dot" style="background:#ff9900;"></div>
-            <div class="fgi-dot" style="background:#0ecb81;"></div>
+<div class="main-grid">
+    <div class="panel">
+        <div class="coin-header" id="header-box">
+            <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" id="main-logo">
+            <div>
+                <div id="main-title" style="font-weight:700;">BITCOIN (BTC)</div>
+                <div class="price-hero" id="main-price">Loading...</div>
+            </div>
         </div>
-        <span id="fgi-value" style="font-size: 14px; font-weight: bold; color: var(--up);">--</span>
-    </div>
-</header>
-
-<div class="main-view">
-    <div class="market-card">
-        <h3 id="chart-pair" style="margin-top:0; font-family: 'Orbitron'; font-size: 1.1rem; color: white;">BTCUSDT Institutional Feed</h3>
-        <div class="chart-section" id="tradingview_widget"></div>
+        <div id="chart_div" style="height: 500px;"></div>
     </div>
 
-    <div class="market-card">
-        <div class="tab-bar">
-            <div class="tab active" onclick="switchList('top', this)">Top 100</div>
-            <div class="tab" onclick="switchList('trending', this)">Trending</div>
-            <div class="tab" onclick="switchList('watch', this)">Watchlist</div>
+    <div class="panel">
+        <div class="tab-box">
+            <div class="tab active" onclick="updateList('top', this)">Top 100</div>
+            <div class="tab" onclick="updateList('fav', this)">Watchlist</div>
         </div>
-
         <div style="max-height: 500px; overflow-y: auto;">
-            <table class="coin-table">
-                <thead>
-                    <tr><th>#</th><th>Coin</th><th>Price</th><th>24h%</th></tr>
-                </thead>
-                <tbody id="market-list-body">
-                    </tbody>
+            <table>
+                <tbody id="coin-list"></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <nav class="bottom-nav">
-    <div class="nav-item active">Markets</div>
-    <div class="nav-item">Analytics</div>
-    <div class="nav-item">Dr. AI</div>
-    <div class="nav-item">Portfolio</div>
-    <div class="nav-item">Intel Hub</div>
+    <div class="nav-link active">Markets</div>
+    <div class="nav-link">Analytics</div>
+    <div class="nav-link">Dr. Dark AI</div>
 </nav>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let rawMarketData = [];
-    const watchList = ['btc', 'eth', 'sol', 'bnb', 'trx'];
+    let allCoins = [];
 
-    async function initTerminal() {
-        await loadMarketData();
-        loadChart('BTCUSDT');
-        updateGlobalStats();
+    async function loadApp() {
+        await refreshPrices();
+        updateStats();
+        selectCoin('bitcoin');
+        setInterval(refreshPrices, 60000);
     }
 
-    async function loadMarketData() {
+    async function refreshPrices() {
         try {
-            // Price Fetch
             const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
-            rawMarketData = await res.json();
-            renderCoinTable(rawMarketData);
-        } catch(e) { console.error("Network Error: Price Feed"); }
+            allCoins = await res.json();
+            renderTable(allCoins);
+        } catch(e) { console.log("API Error"); }
     }
 
-    // 5. Advanced Table Rendering with logos
-    function renderCoinTable(data, isTrending = false) {
-        const body = document.getElementById('market-list-body');
-        body.innerHTML = data.map((coin, i) => `
-            <tr onclick="loadChart('${coin.symbol.toUpperCase()}USDT')">
-                <td style="color:#555; width: 30px;">${i+1}</td>
+    function renderTable(data) {
+        const body = document.getElementById('coin-list');
+        body.innerHTML = data.map(c => `
+            <tr onclick="selectCoin('${c.id}')">
                 <td>
-                    <div class="coin-cell">
-                        <img class="coin-logo" src="${coin.image}" alt="${coin.name} logo">
-                        <div>
-                            <div class="coin-symbol">${coin.symbol.toUpperCase()}</div>
-                            <div class="coin-name">${coin.name}</div>
-                        </div>
+                    <div class="flex-coin">
+                        <img src="${c.image}" class="list-logo">
+                        <b>${c.symbol.toUpperCase()}</b>
                     </div>
                 </td>
-                <td>${isTrending ? 'Hot' : '$'+coin.current_price.toLocaleString()}</td>
-                <td class="${coin.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">
-                    ${coin.price_change_percentage_24h.toFixed(2)}%
+                <td>$${c.current_price.toLocaleString()}</td>
+                <td class="${c.price_change_percentage_24h >= 0 ? 'up' : 'down'}">
+                    ${c.price_change_percentage_24h.toFixed(1)}%
                 </td>
             </tr>
         `).join('');
     }
 
-    function switchList(type, el) {
-        // Tab UI update
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
+    function selectCoin(id) {
+        const coin = allCoins.find(x => x.id === id) || allCoins[0];
+        if(!coin) return;
 
-        // Logic update
-        const body = document.getElementById('market-list-body');
-        body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 20px;">Loading Feed...</td></tr>';
+        document.getElementById('main-logo').src = coin.image;
+        document.getElementById('main-title').innerText = `${coin.name.toUpperCase()} (${coin.symbol.toUpperCase()})`;
+        document.getElementById('main-price').innerText = '$' + coin.current_price.toLocaleString();
 
-        if(type === 'watch') {
-            renderCoinTable(rawMarketData.filter(c => watchList.includes(c.symbol.toLowerCase())));
-        } else if(type === 'trending') {
-            // Simulate Trending
-            fetchTrendingData();
-        } else {
-            loadMarketData();
-        }
-    }
-
-    function loadChart(symbol) {
-        document.getElementById('chart-pair').innerText = symbol + " Institutional Feed";
         new TradingView.widget({
-            "autosize": true,
-            "symbol": "BINANCE:" + symbol,
-            "interval": "D",
-            "timezone": "Etc/UTC",
-            "theme": "dark",
-            "style": "1",
-            "locale": "en",
-            "container_id": "tradingview_widget",
-            "studies": ["RSI@tv-basicstudies"]
+            "autosize": true, "symbol": "BINANCE:" + coin.symbol.toUpperCase() + "USDT",
+            "theme": "dark", "container_id": "chart_div", "style": "1"
         });
     }
 
-    async function updateGlobalStats() {
-        try {
-            // Sentiment
-            const fgiRes = await fetch('https://api.alternative.me/fng/');
-            const fgiData = await fgiRes.json();
-            const fgiValue = fgiData.data[0].value;
-            document.getElementById('fgi-value').innerText = fgiValue + " ("+ fgiData.data[0].value_classification +")";
-            
-            // Stats (Simulation for look)
-            document.getElementById('global-cap').innerText = "$2.34T";
-            document.getElementById('global-vol').innerText = "$84.2B";
-        } catch(e) {}
+    async function updateStats() {
+        const res = await fetch('https://api.alternative.me/fng/');
+        const d = await res.json();
+        document.getElementById('fgi-val').innerText = d.data[0].value + " (" + d.data[0].value_classification + ")";
     }
 
-    // Initialize all systems
-    initTerminal();
-    setInterval(loadMarketData, 60000); // Auto-refresh every 60s
-</script>
+    function updateList(type, el) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        if(type === 'fav') renderTable(allCoins.filter(c => ['btc','eth','sol','trx'].includes(c.symbol.toLowerCase())));
+        else renderTable(allCoins);
+    }
 
+    loadApp();
+</script>
 </body>
 </html>
