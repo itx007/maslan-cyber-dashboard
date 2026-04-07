@@ -1,30 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Dark Institutional | Ultra Intelligence Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f0ff;
+            --primary-glow: rgba(0, 240, 255, 0.4);
+            --secondary: #ff0033;
+            --secondary-glow: rgba(255, 0, 51, 0.4);
+            --bg-black: #010101;
+            --card-bg: rgba(20, 20, 30, 0.6);
+            --border: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg-black);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Modern Glass Login Overlay */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            width: 320px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 12px 0;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        /* Advanced Navbar */
+        .navbar {
+            background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Advanced Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 25px;
+            padding: 25px 5%;
+        }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-container {
+            height: 550px;
+        }
+
+        /* Price Ticker */
+        .ticker {
+            padding: 10px 5%;
+            display: flex;
+            gap: 35px;
+            font-family: monospace;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+            background: #020202;
+            font-size: 0.85rem;
+        }
+
+        .price-tag { color: #888; margin-right: 5px; }
+        .price-value { color: white; font-weight: bold; }
+        .change-up { color: #00ff88; font-weight: bold; }
+
+        /* NEON ULTRA MODERN BUTTONS */
+        .tab-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--primary);
+            color: black;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 0 20px var(--secondary-glow);
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="login-card">
+        <h2 style="font-family: 'Orbitron'; color: white; margin-bottom: 30px;">AUTHENTICATION REQUIRED</h2>
+        <input type="text" id="user" placeholder="Access ID">
+        <input type="password" id="pass" placeholder="Security Key">
+        <button class="action-btn" style="border-color:var(--primary); color:var(--primary);" onclick="unlock()">INITIALIZE ACCESS</button>
+        <p id="err" style="color:var(--secondary); font-size: 0.8rem; margin-top:15px;"></p>
+    </div>
+</div>
+
+<div class="navbar">
+    <div class="logo"><div class="logo-dot"></div>DR. DARK ANALYTICS</div>
+    <div style="font-size: 0.8rem; color: #888;">STATUS: <span style="color:#00ff88;">ACTIVE</span></div>
+</div>
+
+<div class="ticker">
+    <span><span class="price-tag">BTC/USDT</span> <span class="price-value" id="btc-p">...</span></span>
+    <span><span class="price-tag">ETH/USDT</span> <span class="price-value" id="eth-p">...</span></span>
+    <span><span class="price-tag">BNB/USDT</span> <span class="price-value" id="bnb-p">...</span></span>
+    <span><span class="price-tag">Sentiment</span> <span id="fgi" class="change-up">Loading...</span></span>
+</div>
+
 <div class="main-grid">
     <div class="card chart-container">
-        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:BTCUSDT')">BTC</button>
-            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:ETHUSDT')">ETH</button>
-            <button class="btn" style="width: auto; padding: 5px 15px;" onclick="changeChart('BINANCE:BNBUSDT')">BNB</button>
+        <div class="tab-group">
+            <button class="tab-btn active" id="btn-btc" onclick="changeChart('BINANCE:BTCUSDT', this)">BTC</button>
+            <button class="tab-btn" id="btn-eth" onclick="changeChart('BINANCE:ETHUSDT', this)">ETH</button>
+            <button class="tab-btn" id="btn-bnb" onclick="changeChart('BINANCE:BNBUSDT', this)">BNB</button>
         </div>
-        
-        <h3 id="chart-title" style="margin-top:0; font-size: 0.9rem; color: var(--primary);">LIVE MARKET DATA (BTC)</h3>
-        <div id="tradingview_chart" style="height: 90%;"></div>
+        <div id="tradingview_chart" style="height: calc(100% - 70px);"></div>
     </div>
 
     <div class="card">
-        <h3 style="margin-top:0; color: var(--primary);">MARKET TOOLS</h3>
-        <button class="btn">Technical Scanner v4.2</button>
-        <button class="btn">Whale Wallet Tracker</button>
-        <button class="btn">AI Signal Generator</button>
+        <h3 style="margin-top:0; color: white; font-family:'Orbitron'; font-size: 1rem;">ADVANCED TOOLS</h3>
+        <button class="action-btn">Scan Market Trends</button>
+        <button class="action-btn">Whale Wallet Tracker</button>
+        <button class="action-btn">AI Signal Feed</button>
+        
+        <div style="margin-top:35px; border-top: 1px solid var(--border); padding-top:25px; font-size: 0.8rem; color: #AAA; line-height: 1.5;">
+            <p style="color: var(--secondary); font-weight: bold;">SYSTEM ALERT:</p>
+            <p>Significant whale accumulation detected. Multi-exchange data points towards a potential breakout.</p>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let currentWidget;
+    function unlock() {
+        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
+            document.getElementById('login-screen').style.display = 'none';
+            initDashboard();
+        } else {
+            document.getElementById('err').innerText = "INVALID ACCESS KEY";
+        }
+    }
 
-    function changeChart(symbol) {
-        document.getElementById('chart-title').innerText = `LIVE MARKET DATA (${symbol.split(':')[1]})`;
-        
+    function changeChart(symbol, element) {
+        // Update active tab style
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        element.classList.add('active');
+
+        // Reload TradingView Widget
         new TradingView.widget({
             "autosize": true,
             "symbol": symbol,
@@ -33,32 +262,41 @@
             "theme": "dark",
             "style": "1",
             "locale": "en",
-            "toolbar_bg": "#f1f3f6",
+            "toolbar_bg": "rgba(0,0,0,0)",
             "enable_publishing": false,
+            "hide_side_toolbar": false,
             "hide_top_toolbar": false,
+            "save_image": false,
             "container_id": "tradingview_chart"
         });
     }
 
-    // Initial load with BTC
-    function unlock() {
-        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
-            document.getElementById('login-screen').style.display = 'none';
-            changeChart('BINANCE:BTCUSDT');
-            updateData();
-            setInterval(updateData, 10000);
-        } else {
-            document.getElementById('err').innerText = "INVALID CREDENTIALS";
-        }
+    function initDashboard() {
+        // Initial chart load (BTC)
+        const btcBtn = document.getElementById('btn-btc');
+        changeChart('BINANCE:BTCUSDT', btcBtn);
+        
+        // Initial price data load
+        updatePrices();
+        setInterval(updatePrices, 10000); // Update prices every 10s
     }
 
-    async function updateData() {
+    async function updatePrices() {
         try {
+            // Price Fetch
             const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd');
             const data = await res.json();
             document.getElementById('btc-p').innerText = `$${data.bitcoin.usd.toLocaleString()}`;
             document.getElementById('eth-p').innerText = `$${data.ethereum.usd.toLocaleString()}`;
             document.getElementById('bnb-p').innerText = `$${data.binancecoin.usd.toLocaleString()}`;
+
+            // Sentiment Fetch (Fear and Greed Index)
+            const fgiRes = await fetch('https://api.alternative.me/fng/');
+            const fgiData = await fgiRes.json();
+            document.getElementById('fgi').innerText = `${fgiData.data[0].value_classification} (${fgiData.data[0].value})`;
         } catch(e) {}
     }
 </script>
+
+</body>
+</html>
