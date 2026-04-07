@@ -1,138 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Dark | CMC Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #0b0e11; --card: #1e2329; --primary: #f0b90b; --text: #eaecef; --border: #474d57; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
-        
-        /* Global Stats Bar */
-        .global-stats { background: #181a20; padding: 10px 5%; display: flex; gap: 20px; font-size: 0.7rem; color: #848e9c; border-bottom: 1px solid var(--border); }
-        .stat-val { color: var(--primary); font-weight: bold; }
-
-        /* Login Screen */
-        #login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .login-card { background: var(--card); padding: 40px; border-radius: 15px; border: 1px solid var(--border); text-align: center; width: 300px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #0b0e11; border: 1px solid var(--border); color: white; border-radius: 5px; outline: none; }
-
-        /* CMC Style Dashboard */
-        .header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; }
-        .container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 0 5% 20px; }
-        @media (max-width: 1000px) { .container { grid-template-columns: 1fr; } }
-
-        .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
-        
-        /* Market List & Search */
-        .search-container { position: relative; margin-bottom: 15px; }
-        .search-bar { width: 90%; padding: 12px 40px 12px 15px; background: #2b3139; border: none; border-radius: 8px; color: white; }
-        
-        .market-tabs { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .tab { cursor: pointer; font-weight: bold; color: #848e9c; }
-        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; font-size: 0.75rem; color: #848e9c; padding-bottom: 10px; }
-        td { padding: 15px 0; border-bottom: 1px solid #2b3139; cursor: pointer; font-size: 0.85rem; }
-        .price-up { color: #0ecb81; } .price-down { color: #f6465d; }
-
-        .btn { background: var(--primary); color: #000; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-<div id="login-screen">
-    <div class="login-card">
-        <h2 style="color: var(--primary);">DR. DARK ACCESS</h2>
-        <input type="text" id="user" placeholder="Admin ID">
-        <input type="password" id="pass" placeholder="Password">
-        <button class="btn" onclick="unlock()">INITIALIZE ACCESS</button>
-    </div>
-</div>
-
-<div class="global-stats">
-    <span>Market Cap: <span class="stat-val" id="total-cap">$...</span></span>
-    <span>BTC Dom: <span class="stat-val" id="btc-dom">...%</span></span>
-    <span>Fear & Greed Index: <span class="stat-val" id="fgi">...</span></span>
-</div>
-
-<div class="header">
-    <h1 style="font-size: 1.5rem;">Dr. Dark Analytics</h1>
-    <div style="font-size: 0.8rem;">Status: <span style="color:#0ecb81;">● SECURE</span></div>
-</div>
-
-<div class="container">
-    <div class="card">
-        <h3 id="chart-title">BTCUSDT Technical Analysis</h3>
-        <div id="tradingview_chart" style="height: 500px;"></div>
-    </div>
-
-    <div class="card">
-        <div class="search-container">
-            <input type="text" id="coinSearch" class="search-bar" placeholder="Search Coins..." onkeyup="search()">
-        </div>
-        
-        <div class="market-tabs">
-            <div class="tab active">Top 100</div>
-            <div class="tab">Trending</div>
-            <div class="tab">Watchlist</div>
-        </div>
-
-        <div style="max-height: 450px; overflow-y: auto;">
-            <table>
-                <thead>
-                    <tr><th>#</th><th>Name</th><th>Price</th><th>24h%</th></tr>
-                </thead>
-                <tbody id="market-list"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let coinData = [];
+    let coinData = []; // Global data store
+    let favorites = ['btc', 'eth', 'sol', 'bnb', 'trx']; // Sample Watchlist
 
-    function unlock() {
-        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
-            document.getElementById('login-screen').style.display = 'none';
-            initApp();
+    // 1. Tab Switching & Data Loading Logic
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', async () => {
+            // UI Update: Sabse "active" class hatao aur click wale par lagao
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            const mode = tab.innerText.toLowerCase();
+            const listContainer = document.getElementById('market-list');
+            listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center;">Loading...</td></tr>';
+
+            if(mode.includes('trending')) {
+                await fetchTrending();
+            } else if(mode.includes('watchlist')) {
+                showWatchlist();
+            } else {
+                await fetchMarketData(); // Top 100
+            }
+        });
+    });
+
+    // 2. Trending Coins Function (API se real-time data lega)
+    async function fetchTrending() {
+        try {
+            const res = await fetch('https://api.coingecko.com/api/v3/search/trending');
+            const data = await res.json();
+            const trending = data.coins.map(c => ({
+                symbol: c.item.symbol.toUpperCase(),
+                current_price: "Trending", 
+                price_change_percentage_24h: 0,
+                name: c.item.name
+            }));
+            renderTable(trending);
+        } catch (e) { console.error("Trending error", e); }
+    }
+
+    // 3. Watchlist Function
+    function showWatchlist() {
+        const filtered = coinData.filter(c => favorites.includes(c.symbol.toLowerCase()));
+        if(filtered.length === 0) {
+            document.getElementById('market-list').innerHTML = '<tr><td colspan="4" style="text-align:center;">Watchlist is empty</td></tr>';
+        } else {
+            renderTable(filtered);
         }
     }
 
-    async function initApp() {
-        fetchMarketData();
-        fetchGlobalStats();
-        loadChart('BTCUSDT');
-        setInterval(fetchMarketData, 60000);
-    }
-
-    async function fetchGlobalStats() {
-        const res = await fetch('https://api.coingecko.com/api/v3/global');
-        const data = await res.json();
-        document.getElementById('total-cap').innerText = '$' + (data.data.total_market_cap.usd / 1e12).toFixed(2) + 'T';
-        document.getElementById('btc-dom').innerText = data.data.market_cap_percentage.btc.toFixed(1) + '%';
-        
-        const fgiRes = await fetch('https://api.alternative.me/fng/');
-        const fgiData = await fgiRes.json();
-        document.getElementById('fgi').innerText = fgiData.data[0].value;
-    }
-
+    // 4. Main Market Data (Top 100)
     async function fetchMarketData() {
-        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
-        coinData = await res.json();
-        renderTable(coinData);
+        try {
+            const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
+            coinData = await res.json();
+            renderTable(coinData);
+        } catch (e) { console.error("Market data error", e); }
     }
 
+    // Table Render karne ka professional tarika
     function renderTable(data) {
         const list = document.getElementById('market-list');
         list.innerHTML = data.map((coin, i) => `
-            <tr onclick="loadChart('${coin.symbol.toUpperCase()}USDT')">
+            <tr onclick="loadChart('${coin.symbol}USDT')">
                 <td style="color:#848e9c">${i+1}</td>
-                <td><strong>${coin.symbol.toUpperCase()}</strong></td>
-                <td>$${coin.current_price.toLocaleString()}</td>
+                <td><strong>${coin.symbol}</strong></td>
+                <td>${typeof coin.current_price === 'number' ? '$' + coin.current_price.toLocaleString() : coin.current_price}</td>
                 <td class="${coin.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">
                     ${coin.price_change_percentage_24h.toFixed(2)}%
                 </td>
@@ -140,18 +73,9 @@
         `).join('');
     }
 
-    function search() {
-        const q = document.getElementById('coinSearch').value.toLowerCase();
-        renderTable(coinData.filter(c => c.symbol.toLowerCase().includes(q) || c.name.toLowerCase().includes(q)));
-    }
-
-    function loadChart(symbol) {
-        document.getElementById('chart-title').innerText = symbol + " Analysis";
-        new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:"+symbol, "interval": "D", "theme": "dark", "style": "1",
-            "container_id": "tradingview_chart", "studies": ["RSI@tv-basicstudies", "MAExp@tv-basicstudies"]
-        });
-    }
+    // Initial Load
+    window.onload = () => {
+        fetchMarketData();
+        // Global stats load karne ka function yahan call karein
+    };
 </script>
-</body>
-</html>
