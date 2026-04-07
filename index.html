@@ -3,221 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dr. Dark | Crypto Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Dr. Dark | Institutional Crypto Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #00f0ff;
             --secondary: #ff0033;
-            --accent: #8a2be2;
-            --bg-dark: #050505;
-            --bg-panel: #0a0a0f;
-            --text-primary: #ffffff;
+            --bg-black: #020204;
+            --card-bg: rgba(15, 15, 25, 0.7);
+            --border: rgba(0, 240, 255, 0.2);
         }
 
         body {
-            font-family: 'Orbitron', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
             margin: 0;
+            background: var(--bg-black);
+            color: white;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        /* Live Price Bar */
-        .price-ticker {
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid var(--primary);
-            padding: 10px;
+        /* Login Overlay */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-black);
+            z-index: 9999;
             display: flex;
-            justify-content: space-around;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--primary);
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
-        .header {
+        .login-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid var(--primary);
             text-align: center;
-            padding: 40px 20px;
-            text-transform: uppercase;
-            letter-spacing: 5px;
+            backdrop-filter: blur(10px);
+            width: 300px;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 5px;
+            outline: none;
         }
 
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        /* Top Navigation Bar */
+        .navbar {
+            background: rgba(0,0,0,0.8);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Grid Layout */
+        .main-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 2fr 1fr;
             gap: 20px;
+            padding: 20px 5%;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
         }
 
         .card {
-            background: var(--bg-panel);
-            border: 1px solid rgba(0, 240, 255, 0.2);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .chart-container {
+            height: 450px;
         }
+
+        /* Real-time Ticker */
+        .ticker {
+            background: #0a0a0f;
+            padding: 10px;
+            display: flex;
+            gap: 30px;
+            font-family: monospace;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .price-tag { color: var(--primary); }
+        .change-up { color: #00ff88; }
 
         .btn {
             background: transparent;
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 15px;
+            padding: 12px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            text-transform: uppercase;
+            width: 100%;
+            margin-top: 10px;
             transition: 0.3s;
-            text-decoration: none;
-            text-align: center;
+            text-transform: uppercase;
+            font-weight: bold;
         }
 
         .btn:hover {
             background: var(--primary);
             color: black;
-            box-shadow: 0 0 20px var(--primary);
-        }
-
-        .social-footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 50px;
-        }
-
-        /* Login Overlay */
-        #login-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-box {
-            background: var(--bg-panel);
-            padding: 40px;
-            border: 2px solid var(--primary);
-            text-align: center;
-        }
-
-        input {
-            background: #111;
-            border: 1px solid var(--primary);
-            color: white;
-            padding: 10px;
-            margin: 10px 0;
-            width: 80%;
+            box-shadow: 0 0 15px var(--primary);
         }
     </style>
 </head>
 <body>
 
-<div id="login-overlay">
-    <div class="login-box">
-        <h2>DR. DARK ACCESS</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <br>
-        <button class="btn" onclick="checkLogin()" style="width: 80%;">Initialize</button>
-        <p id="error" style="color: red; margin-top: 10px;"></p>
+<div id="login-screen">
+    <div class="login-card">
+        <h2 style="font-family: 'Orbitron'; color: var(--primary);">SYSTEM AUTH</h2>
+        <input type="text" id="user" placeholder="Access ID">
+        <input type="password" id="pass" placeholder="Security Token">
+        <button class="btn" onclick="unlock()">ENTER SYSTEM</button>
+        <p id="err" style="color:var(--secondary); font-size: 0.8rem; margin-top:10px;"></p>
     </div>
 </div>
 
-<div class="price-ticker">
-    <div id="btc-price">BTC: Loading...</div>
-    <div id="eth-price">ETH: Loading...</div>
-    <div id="bnb-price">BNB: Loading...</div>
+<div class="ticker">
+    <span>BTC/USDT <span class="price-tag" id="btc-p">...</span></span>
+    <span>ETH/USDT <span class="price-tag" id="eth-p">...</span></span>
+    <span>BNB/USDT <span class="price-tag" id="bnb-p">...</span></span>
+    <span>Sentiment: <span id="fgi" class="change-up">Loading...</span></span>
 </div>
 
-<div class="header">
-    <h1>Doctor Dark Analytics</h1>
-    <p style="color: var(--secondary);">Security & Market Intelligence Platform</p>
+<div class="navbar">
+    <div class="logo">DR. DARK ANALYTICS</div>
+    <div style="font-size: 0.8rem; opacity:0.6;">NETWORK STATUS: SECURE</div>
 </div>
 
-<div class="dashboard-container">
+<div class="main-grid">
+    <div class="card chart-container">
+        <h3 style="margin-top:0; font-size: 0.9rem; color: var(--primary);">LIVE MARKET DATA (BTC)</h3>
+        <div id="tradingview_chart" style="height: 100%;"></div>
+    </div>
+
     <div class="card">
-        <h3>Market Operations</h3>
-        <div class="btn-group">
-            <a href="#" class="btn">Technical Scanner</a>
-            <a href="#" class="btn">Whale Tracker</a>
-            <a href="#" class="btn">Pattern Recognition</a>
+        <h3 style="margin-top:0; color: var(--primary);">MARKET TOOLS</h3>
+        <button class="btn">Technical Scanner v4.2</button>
+        <button class="btn">Whale Wallet Tracker</button>
+        <button class="btn">AI Signal Generator</button>
+        
+        <div style="margin-top:30px; border-top: 1px solid var(--border); padding-top:20px;">
+            <p style="font-size: 0.8rem; color: var(--secondary);">LATEST ALERT:</p>
+            <p style="font-size: 0.75rem; line-height:1.4; opacity:0.8;">
+                Major BTC inflow detected in Coinbase exchange wallet. Possible volatility expected in 24h.
+            </p>
         </div>
     </div>
-
-    <div class="card">
-        <h3>Live Activity</h3>
-        <canvas id="liveChart"></canvas>
-    </div>
 </div>
 
-<div class="social-footer">
-    <h3>Connect with Dr. Dark</h3>
-    <div style="display: flex; justify-content: center; gap: 20px;">
-        <a href="https://www.binance.com/en/square/profile/drdark" class="btn" target="_blank">Binance Square</a>
-        <a href="#" class="btn" target="_blank">Telegram Channel</a>
-    </div>
-    <p style="font-size: 0.7rem; margin-top: 20px; opacity: 0.5;">© 2026 DOCTOR DARK | ALL RIGHTS RESERVED</p>
-</div>
-
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    function checkLogin() {
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-        if(user === 'admin' && pass === 'cyber2024') {
-            document.getElementById('login-overlay').style.display = 'none';
+    function unlock() {
+        if(document.getElementById('user').value === 'admin' && document.getElementById('pass').value === 'cyber2024') {
+            document.getElementById('login-screen').style.display = 'none';
+            initDashboard();
         } else {
-            document.getElementById('error').innerText = "ACCESS DENIED: Unauthorized User";
+            document.getElementById('err').innerText = "INVALID CREDENTIALS";
         }
     }
 
-    // Live Crypto Prices using CoinGecko API
-    async function updatePrices() {
+    function initDashboard() {
+        // TradingView Widget
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "BINANCE:BTCUSDT",
+            "interval": "60",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_top_toolbar": false,
+            "container_id": "tradingview_chart"
+        });
+
+        updateData();
+        setInterval(updateData, 10000);
+    }
+
+    async function updateData() {
         try {
-            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd');
-            const data = await response.json();
-            document.getElementById('btc-price').innerText = `BTC: $${data.bitcoin.usd.toLocaleString()}`;
-            document.getElementById('eth-price').innerText = `ETH: $${data.ethereum.usd.toLocaleString()}`;
-            document.getElementById('bnb-price').innerText = `BNB: $${data.binancecoin.usd.toLocaleString()}`;
-        } catch (e) {
-            console.log("Price fetch failed");
-        }
+            // Prices
+            const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd');
+            const data = await res.json();
+            document.getElementById('btc-p').innerText = `$${data.bitcoin.usd.toLocaleString()}`;
+            document.getElementById('eth-p').innerText = `$${data.ethereum.usd.toLocaleString()}`;
+            document.getElementById('bnb-p').innerText = `$${data.binancecoin.usd.toLocaleString()}`;
+
+            // Fear and Greed
+            const fgiRes = await fetch('https://api.alternative.me/fng/');
+            const fgiData = await fgiRes.json();
+            document.getElementById('fgi').innerText = `${fgiData.data[0].value_classification} (${fgiData.data[0].value})`;
+        } catch(e) {}
     }
-
-    setInterval(updatePrices, 10000);
-    updatePrices();
-
-    // Live Activity Chart
-    const ctx = document.getElementById('liveChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['1m', '2m', '3m', '4m', '5m'],
-            datasets: [{
-                label: 'Network Load',
-                data: [12, 19, 3, 5, 2],
-                borderColor: '#00f0ff',
-                tension: 0.4
-            }]
-        }
-    });
 </script>
 
 </body>
