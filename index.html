@@ -2,141 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor Dark | AI Trading Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Doctor Dark AI | Terminal</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/manifest+json,{'name':'Doctor Dark AI','short_name':'DrDark','display':'standalone','background_color':'#0b0e11','theme_color':'#0b0e11'}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0b0e11; --card: #181a20; --primary: #f0b90b; --text: #eff2f5; --border: #2b3139; --up: #0ecb81; --down: #f6465d; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
-        
-        .top-nav { background: #181a20; padding: 10px 5%; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 1.2rem; }
+        :root { --bg: #0b0e11; --card: #181a20; --primary: #f0b90b; --text: #eff2f5; --sub: #848e9c; --border: #2b3139; --up: #0ecb81; --down: #f6465d; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
 
-        .container { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; padding: 20px 5%; }
-        @media (max-width: 1100px) { .container { grid-template-columns: 1fr; } }
+        /* Fixed Top Header */
+        .app-header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; z-index: 1000; }
+        .logo { font-family: 'Orbitron'; color: var(--primary); font-size: 1.1rem; }
 
-        .panel { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        
-        /* AI INSIGHTS STYLE */
-        .ai-hub { background: linear-gradient(145deg, #1e2329, #0b0e11); border: 1px solid var(--primary); padding: 15px; border-radius: 10px; margin-top: 20px; }
-        .ai-badge { background: var(--primary); color: #000; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; margin-bottom: 10px; display: inline-block; }
-        
-        .tab-bar { display: flex; gap: 20px; border-bottom: 1px solid var(--border); margin-bottom: 15px; }
-        .tab { cursor: pointer; padding-bottom: 8px; color: #848e9c; font-weight: 600; }
-        .tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        /* Scrollable Content */
+        .app-content { height: calc(100vh - 120px); margin-top: 60px; overflow-y: auto; padding: 15px; }
 
+        /* Panel Styling */
+        .panel { background: var(--card); border-radius: 12px; border: 1px solid var(--border); padding: 15px; margin-bottom: 15px; }
+        
+        /* AI HUB Design */
+        .ai-hub { border: 1px solid var(--primary); background: linear-gradient(145deg, #1e2329, #0b0e11); }
+        .ai-badge { background: var(--primary); color: #000; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 10px; margin-bottom: 8px; display: inline-block; }
+
+        /* Coin Table Style */
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 5px; border-bottom: 1px solid #2b3139; cursor: pointer; font-size: 13px; }
-        .coin-img { width: 20px; vertical-align: middle; margin-right: 8px; }
+        td { padding: 12px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; font-size: 14px; }
+        .c-flex { display: flex; align-items: center; gap: 10px; }
+        .c-logo { width: 22px; height: 22px; border-radius: 50%; }
+
+        /* Bottom Nav */
+        .app-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #181a20; border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-btn { text-align: center; font-size: 10px; color: var(--sub); font-weight: 700; text-transform: uppercase; }
+        .nav-btn.active { color: var(--primary); }
     </style>
 </head>
 <body>
 
-<div class="top-nav">
-    <div class="logo">DOCTOR DARK <span>AI</span></div>
-    <div id="market-status" style="font-size: 11px; color: var(--up);">● AI ANALYSIS ACTIVE</div>
+<div class="app-header">
+    <div class="logo">DR. DARK <span>AI</span></div>
+    <div style="font-size: 10px; color: var(--up);">● LIVE DATA</div>
 </div>
 
-<div class="container">
-    <div>
-        <div class="panel" style="margin-bottom: 20px;">
-            <div id="tradingview_chart" style="height: 450px;"></div>
-        </div>
+<div class="app-content">
+    <div class="panel">
+        <div id="main-chart" style="height: 350px;"></div>
+    </div>
 
-        <div class="panel ai-hub">
-            <span class="ai-badge">DOCTOR DARK AI INSIGHTS</span>
-            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 250px;">
-                    <h4 id="ai-coin-name" style="margin:0 0 10px 0;">BITCOIN ANALYSIS</h4>
-                    <p id="ai-text" style="font-size: 13px; color: #848e9c; line-height: 1.5;">
-                        Scanning technical indicators... RSI is neutral. MACD showing bullish crossover. 
-                        <b>Target: $72,400</b> | <b>Support: $68,200</b>
-                    </p>
-                </div>
-                <div style="width: 200px; height: 120px;" id="ai-gauge">
-                    <div class="tradingview-widget-container">
-                        <div class="tradingview-widget-container__widget"></div>
-                    </div>
-                </div>
-            </div>
+    <div class="panel ai-hub">
+        <span class="ai-badge">DR. DARK AI INSIGHTS</span>
+        <div id="ai-prediction">
+            <h4 id="ai-title" style="margin: 0 0 5px 0; color: #fff;">BTC ANALYSIS</h4>
+            <p id="ai-desc" style="font-size: 12px; color: var(--sub); margin: 0;">Analyzing indicators... RSI/MACD suggest <b>Strong Buy</b> at support.</p>
         </div>
+        <div id="ai-gauge" style="height: 130px; margin-top: 10px;"></div>
     </div>
 
     <div class="panel">
-        <div class="tab-bar">
-            <div class="tab active" onclick="showList('top', this)">Markets</div>
-            <div class="tab" onclick="showList('fav', this)">Watchlist</div>
-        </div>
-        <div style="max-height: 600px; overflow-y: auto;">
-            <table>
-                <tbody id="coin-list"></tbody>
-            </table>
-        </div>
+        <h4 style="margin: 0 0 10px 0;">Market Quotes</h4>
+        <table>
+            <tbody id="market-list">
+                </tbody>
+        </table>
     </div>
 </div>
 
+<nav class="app-nav">
+    <div class="nav-btn active">Markets</div>
+    <div class="nav-btn">AI Hub</div>
+    <div class="nav-btn">Trade</div>
+    <div class="nav-btn">Profile</div>
+</nav>
+
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script>
-    let coins = [];
+    let marketData = [];
 
-    async function init() {
-        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100');
-        coins = await res.json();
-        renderTable(coins);
-        selectCoin('btc');
+    async function startApp() {
+        await fetchData();
+        updateView('btc');
+        setInterval(fetchData, 60000);
+    }
+
+    async function fetchData() {
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50');
+        marketData = await res.json();
+        renderTable(marketData);
     }
 
     function renderTable(data) {
-        const list = document.getElementById('coin-list');
+        const list = document.getElementById('market-list');
         list.innerHTML = data.map(c => `
-            <tr onclick="selectCoin('${c.symbol}')">
-                <td><img src="${c.image}" class="coin-img"> <b>${c.symbol.toUpperCase()}</b></td>
+            <tr onclick="updateView('${c.symbol}')">
+                <td>
+                    <div class="c-flex">
+                        <img src="${c.image}" class="c-logo">
+                        <b>${c.symbol.toUpperCase()}</b>
+                    </div>
+                </td>
                 <td style="text-align:right;">$${c.current_price.toLocaleString()}</td>
-                <td style="text-align:right;" class="${c.price_change_percentage_24h >= 0 ? 'color: #0ecb81' : 'color: #f6465d'}">
+                <td style="text-align:right; font-weight:bold;" class="${c.price_change_percentage_24h >= 0 ? 'color: #0ecb81' : 'color: #f6465d'}">
                     ${c.price_change_percentage_24h.toFixed(1)}%
                 </td>
             </tr>
         `).join('');
     }
 
-    function selectCoin(symbol) {
+    function updateView(symbol) {
         symbol = symbol.toUpperCase();
-        document.getElementById('ai-coin-name').innerText = symbol + " AI PREDICTION";
+        document.getElementById('ai-title').innerText = symbol + " ANALYSIS";
         
-        // 1. Load Main Chart
+        // Load Chart
         new TradingView.widget({
             "autosize": true, "symbol": "BINANCE:" + symbol + "USDT",
-            "interval": "D", "theme": "dark", "container_id": "tradingview_chart"
+            "interval": "H", "theme": "dark", "container_id": "main-chart", "hide_top_toolbar": true
         });
 
-        // 2. Load AI Technical Gauge
-        const gaugeContainer = document.getElementById('ai-gauge');
-        gaugeContainer.innerHTML = ''; 
+        // Load AI Gauge
+        const gauge = document.getElementById('ai-gauge');
+        gauge.innerHTML = '';
         const script = document.createElement('script');
         script.src = "https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js";
         script.async = true;
         script.innerHTML = JSON.stringify({
-            "interval": "4h", "width": "100%", "isTransparent": true, "height": "100%",
+            "interval": "1h", "width": "100%", "height": "100%", "isTransparent": true,
             "symbol": "BINANCE:" + symbol + "USDT", "showIntervalTabs": false, "displayMode": "single", "locale": "en", "colorTheme": "dark"
         });
-        gaugeContainer.appendChild(script);
-
-        // 3. AI Text Logic (Simple Example)
-        document.getElementById('ai-text').innerHTML = `
-            Trend Analysis: <b>${symbol}</b> is currently showing high volatility. 
-            AI suggests a <b>Buy</b> entry near support levels. 
-            <br>Stop Loss: <span style="color:#f6465d">3% below entry</span>.
-        `;
+        gauge.appendChild(script);
     }
 
-    function showList(type, el) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        if(type === 'fav') renderTable(coins.filter(c => ['btc','eth','sol','trx'].includes(c.symbol.toLowerCase())));
-        else renderTable(coins);
-    }
-
-    init();
+    startApp();
 </script>
 </body>
 </html>
